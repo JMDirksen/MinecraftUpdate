@@ -7,25 +7,21 @@ TYPE = "release"
 
 def main():
     version = get_latest_version(TYPE)
-    filename = "minecraft_server.%s.jar" % version["id"]
-    print(version["filename"])
-    print(file_exists(version["filename"]))
-    print(version["download_url"])
-    
+    if file_exists(version["filename"]):
+        print("No new version")
+        os._exit(0)
+    print("Downloading new version...")
+    download(version["download_url"], version["filename"])
 
 def get_latest_version(type):
+    """Get information about the latest version from Mojang."""
     manifest_url = \
         "https://launchermeta.mojang.com/mc/game/version_manifest.json"
-    manifest_json_file = urllib.request.urlopen(manifest_url)
-    manifest = json.load(manifest_json_file)
-    latest_version_id = manifest["latest"][type]
+    manifest = url_to_obj(manifest_url)
     for latest_version in manifest["versions"]:
-        if latest_version["id"] == latest_version_id:
+        if latest_version["id"] == manifest["latest"][type]:
             break
-    
-    version_url = latest_version["url"]
-    version_json_file = urllib.request.urlopen(version_url)
-    version = json.load(version_json_file)
+    version = url_to_obj(latest_version["url"])
     
     return {
         "id": version["id"],
@@ -33,7 +29,16 @@ def get_latest_version(type):
         "download_url": version["downloads"]["server"]["url"],
         }
 
+def url_to_obj(json_url):
+    """Download the json and convert it to an object."""
+    return json.load(urllib.request.urlopen(json_url))
+
+def download(url, filename):
+    """Download a file and store it as filename."""
+    urllib.request.urlretrieve(url, filename)
+
 def file_exists(filepath):
+    """Test if the file exists."""
     return os.path.isfile(filepath)
 
 main()
