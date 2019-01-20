@@ -4,19 +4,21 @@ import urllib.request
 import json
 sys.path.append('./MCRcon')
 import mcrcon
+from shutil import copyfile
 
 # Load config
 with open('config.json', 'r') as f:
     config = json.load(f)
 
 def main():
-    stop_server(config["rcon_password"], config["rcon_host"], config["rcon_port"])
     version = get_latest_version(config["type"])
     if file_exists(version["filename"]):
         print("No new version")
         os._exit(0)
     print("Downloading new version...")
     download(version["download_url"], version["filename"])
+    stop_server(config["rcon_host"], config["rcon_port"], config["rcon_password"])
+    copyfile(version["filename"], config["server_path"] + "server.jar")
 
 def get_latest_version(type):
     """Get information about the latest version from Mojang."""

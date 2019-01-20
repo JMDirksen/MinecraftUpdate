@@ -1,5 +1,6 @@
 {
     "type": "release",
+    "server_path": "../server/",
     "rcon_host": "localhost",
     "rcon_port": 25575,
     "rcon_password": "password"
