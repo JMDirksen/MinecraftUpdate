@@ -1,11 +1,15 @@
+import sys
+import os
 import urllib.request
 import json
-import os
+sys.path.insert(0, './MCRcon')
+import mcrcon
 
 # release or snapshot
 TYPE = "release"
 
 def main():
+    stop_server()
     version = get_latest_version(TYPE)
     if file_exists(version["filename"]):
         print("No new version")
@@ -40,5 +44,10 @@ def download(url, filename):
 def file_exists(filepath):
     """Test if the file exists."""
     return os.path.isfile(filepath)
+
+def stop_server(host="localhost", rcon_port=25575, rcon_password=""):
+    rcon = mcrcon.MCRcon()
+    rcon.connect(host, rcon_port, rcon_password)
+    rcon.command("list")
 
 main()
