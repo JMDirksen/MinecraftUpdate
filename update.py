@@ -18,7 +18,11 @@ def main():
     print("Downloading new version...")
     download(version["download_url"], version["filename"])
     stop_server(config["rcon_host"], config["rcon_port"], config["rcon_password"])
-    copyfile(version["filename"], config["server_path"] + "server.jar")
+    try:
+        copyfile(version["filename"], config["server_path"] + "server.jar")
+        print("Update completed.")
+    except:
+        print("Unable to update server, is your config (server_path) correct?")
 
 def get_latest_version(type):
     """Get information about the latest version from Mojang."""
@@ -49,8 +53,11 @@ def file_exists(filepath):
     return os.path.isfile(filepath)
 
 def stop_server(host, rcon_port, rcon_password):
-    rcon = mcrcon.MCRcon()
-    rcon.connect(host, rcon_port, rcon_password)
-    rcon.command("stop")
+    try:
+        rcon = mcrcon.MCRcon()
+        rcon.connect(host, rcon_port, rcon_password)
+        rcon.command("stop")
+    except:
+        print("Failed to stop server, maybe it's not running? Or your config may be incorrect.")
 
 main()
