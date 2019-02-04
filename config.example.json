@@ -3,5 +3,6 @@
     "server_path": "../server/",
     "rcon_host": "localhost",
     "rcon_port": 25575,
-    "rcon_password": "password"
+    "rcon_password": "password",
+    "start_command": "start cmd /c \"cd ../server && java -jar server.jar nogui\""
 }

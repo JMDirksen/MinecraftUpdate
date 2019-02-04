@@ -22,6 +22,8 @@ def main():
         print("Update completed.")
     except FileNotFoundError:
         print("Unable to update server, is your config (server_path) correct?")
+    start_server()
+    print("Done.")
 
 
 def get_latest_version(type):
@@ -63,6 +65,11 @@ def stop_server(host, rcon_port, rcon_password):
         rcon.command("stop")
     except ConnectionRefusedError:
         print("Failed to stop server, maybe it's not running? Or your config may be incorrect.")
+
+
+def start_server():
+    print("Starting server...")
+    os.system(config["start_command"])
 
 
 main()
