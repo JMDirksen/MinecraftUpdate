@@ -5,9 +5,12 @@ from mcrcon import MCRcon
 from shutil import copyfile
 
 # Load config
-with open('config.json', 'r') as f:
-    config = json.load(f)
-
+try:
+    with open('config.json', 'r') as f:
+        config = json.load(f)
+except FileNotFoundError:
+    print("Missing config.json, please copy config.example.json to config.json and modify as needed.")
+    os._exit(1)
 
 def main():
     version = get_latest_version(config["type"])
