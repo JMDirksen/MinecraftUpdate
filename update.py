@@ -1,6 +1,8 @@
 import os
 import urllib.request
 import json
+import time
+from time import sleep
 from mcrcon import MCRcon
 from shutil import copyfile
 
@@ -19,6 +21,7 @@ def main():
         os._exit(0)
     print("Downloading new version...")
     download(version["download_url"], version["filename"])
+    print("Stopping server...")
     stop_server(config["rcon_host"], config["rcon_port"], config["rcon_password"])
     try:
         copyfile(version["filename"], config["server_path"] + "server.jar")
@@ -65,6 +68,7 @@ def stop_server(host, rcon_port, rcon_password):
     try:
         with MCRcon(host, rcon_password, rcon_port) as mcr:
             mcr.command("stop")
+        time.sleep(10)
     except ConnectionRefusedError:
         print("Failed to stop server, maybe it's not running? Or your config may be incorrect.")
 
