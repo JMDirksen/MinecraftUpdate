@@ -1,7 +1,7 @@
 import os
 import urllib.request
 import json
-from MCRcon.mcrcon import MCRcon
+from mcrcon import MCRcon
 from shutil import copyfile
 
 # Load config
@@ -60,9 +60,8 @@ def file_exists(filepath):
 
 def stop_server(host, rcon_port, rcon_password):
     try:
-        rcon = MCRcon()
-        rcon.connect(host, rcon_port, rcon_password)
-        rcon.command("stop")
+        with MCRcon(host, rcon_password, rcon_port) as mcr:
+            mcr.command("stop")
     except ConnectionRefusedError:
         print("Failed to stop server, maybe it's not running? Or your config may be incorrect.")
 
