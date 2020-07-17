@@ -2,7 +2,6 @@ import os
 import urllib.request
 import json
 import time
-from time import sleep
 from mcrcon import MCRcon
 from shutil import copyfile
 
